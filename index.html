@@ -258,6 +258,7 @@
             font-weight: bold;
             display: block;
             margin-bottom: 10px;
+            font-family: 'Share Tech Mono', monospace;
         }
 
         #saturacion {
@@ -327,6 +328,101 @@
             color: var(--text);
             line-height: 1.4;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* POPUP INBOX UI */
+        #msg-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--bg);
+            border: 2px solid var(--accent-red);
+            display: none;
+            /* Hidden until message */
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2000;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+            font-size: 1.5rem;
+            animation: pulse-border 1.5s infinite;
+        }
+
+        #msg-icon:hover {
+            background: var(--accent-red);
+            color: #000;
+        }
+
+        @keyframes pulse-border {
+            0% {
+                border-color: var(--accent-red);
+                box-shadow: 0 0 5px var(--accent-red);
+            }
+
+            50% {
+                border-color: #fff;
+                box-shadow: 0 0 20px #fff;
+            }
+
+            100% {
+                border-color: var(--accent-red);
+                box-shadow: 0 0 5px var(--accent-red);
+            }
+        }
+
+        #msg-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #050505;
+            border: 1px solid var(--accent-red);
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 51, 51, 0.2);
+        }
+
+        .modal-header {
+            color: var(--accent-red);
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed var(--accent-red);
+            padding-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .modal-close {
+            margin-top: 25px;
+            text-align: right;
+        }
+
+        .modal-close button {
+            background: transparent;
+            border: 1px solid var(--dim);
+            color: var(--dim);
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: inherit;
+            text-transform: uppercase;
+        }
+
+        .modal-close button:hover {
+            border-color: #fff;
+            color: #fff;
         }
     </style>
 </head>
@@ -404,10 +500,25 @@
                     <input type="text" id="input-ev" onkeypress="handleEvidence(event)">
                 </div>
             </div>
+
+        </div>
+    </div>
+
+    <!-- POPUP INBOX -->
+    <div id="msg-icon" onclick="openMsgModal()" title="INCOMING TRANSMISSION">✉</div>
+    <div id="msg-modal">
+        <div class="modal-content">
+            <div class="modal-header">[ INCOMING TRANSMISSION ]</div>
+            <div id="modal-payload" style="line-height: 1.6; font-size: 0.95rem; color: #fff;"></div>
+            <div id="modal-meta" style="font-size: 0.7rem; color: var(--dim); margin-top: 15px;"></div>
+            <div class="modal-close">
+                <button onclick="closeMsgModal()">[ CLOSE ]</button>
+            </div>
         </div>
     </div>
 
     <script>
+        let typingTimer;
         const translations = {
             es: {
                 monitor: "INTERNET MUERTA // NODO_PIONERO", tminus: "> T-MINUS_PARA_SILENCIO_TOTAL:", sat_text: "SATURACIÓN_SINTÉTICA:",
@@ -495,7 +606,7 @@
             }
         };
 
-        let currentLang = 'es'; let currentTab = 0; let typingTimer;
+        let currentLang = 'es'; let currentTab = 0;
 
         function validateAccess() {
             const idVal = document.getElementById('user-id').value.trim().toLowerCase();
@@ -580,16 +691,56 @@
             const target = new Date("March 24, 2026 00:00:00").getTime();
             const now = Date.now();
             const diff = target - now;
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
+            const d = Math.floor(diff / 86400000).toString().padStart(2, '0');
+            const h = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
+            const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
             document.getElementById('t-minus').innerText = `${d}d:${h}h:${m}m:${s}s`;
             document.getElementById('saturacion').innerText = (91.2458 + Math.random() * 0.001).toFixed(6) + "%";
         }, 1000);
 
         const bLang = navigator.language.split('-')[0];
         currentLang = translations[bLang] ? bLang : 'es';
+    </script>
+    <script>
+        (function () {
+            const socket = io();
+            let lastMessage = null;
+
+            window.openMsgModal = function () {
+                const modal = document.getElementById('msg-modal');
+                const payload = document.getElementById('modal-payload');
+                const meta = document.getElementById('modal-meta');
+                if (lastMessage) {
+                    payload.innerText = lastMessage.message;
+                    meta.innerText = 'TIMESTAMP: ' + new Date(lastMessage.timestamp).toLocaleString();
+                    modal.style.display = 'flex';
+                    document.getElementById('msg-icon').style.animation = 'none'; // Stop blinking once seen
+                }
+            };
+
+            window.closeMsgModal = function () {
+                document.getElementById('msg-modal').style.display = 'none';
+            };
+
+            socket.on('new_broadcast', (data) => {
+                if (data.protocol === 'all' || data.protocol === 'classic') {
+                    lastMessage = data;
+                    const icon = document.getElementById('msg-icon');
+                    icon.style.display = 'flex';
+                    icon.style.animation = 'pulse-border 1.5s infinite';
+                }
+            });
+
+            socket.on('history', (historyList) => {
+                const relevant = historyList.filter(d => d.protocol === 'all' || d.protocol === 'classic');
+                if (relevant.length > 0) {
+                    lastMessage = relevant[relevant.length - 1];
+                    document.getElementById('msg-icon').style.display = 'flex';
+                    document.getElementById('msg-icon').style.animation = 'none'; // Don't blink for history
+                }
+            });
+        })();
     </script>
 </body>
 
