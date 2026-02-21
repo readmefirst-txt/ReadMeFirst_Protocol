@@ -333,41 +333,39 @@
         /* POPUP INBOX UI */
         #msg-icon {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 25px;
-            height: 25px;
+            top: 10px;
+            right: 10px;
+            width: 35px;
+            height: 35px;
             background: var(--bg);
-            border: 1px solid var(--accent-red);
+            border: 2px solid var(--accent-red);
             display: none;
             /* Hidden until message */
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 100;
-            font-size: 1rem;
-            animation: pulse-border 1.5s infinite;
+            font-size: 1.4rem;
+            animation: blink-alert 1s infinite steps(2);
         }
 
         #msg-icon:hover {
             background: var(--accent-red);
             color: #000;
+            animation: none;
         }
 
-        @keyframes pulse-border {
+        @keyframes blink-alert {
             0% {
                 border-color: var(--accent-red);
-                box-shadow: 0 0 5px var(--accent-red);
+                background: transparent;
+                color: var(--accent-red);
             }
 
             50% {
                 border-color: #fff;
-                box-shadow: 0 0 20px #fff;
-            }
-
-            100% {
-                border-color: var(--accent-red);
-                box-shadow: 0 0 5px var(--accent-red);
+                background: var(--accent-red);
+                color: #000;
             }
         }
 
@@ -469,9 +467,9 @@
         </div>
 
         <div class="box">
-            <div id="msg-icon" onclick="openMsgModal()" title="INCOMING TRANSMISSION">✉</div>
             <div class="label" id="lbl-monitor">---</div>
-            <div class="content" style="min-height: auto;">
+            <div class="content" style="min-height: auto; position: relative;">
+                <div id="msg-icon" onclick="openMsgModal()" title="INCOMING TRANSMISSION">✉</div>
                 <div style="color: var(--accent-red); font-size: 10px;" id="lbl-tminus">---</div>
                 <span id="t-minus">000:00:00:00</span>
                 <div style="border-top: 1px solid var(--border); padding-top: 10px;">
