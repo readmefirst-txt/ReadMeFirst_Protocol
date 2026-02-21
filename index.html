@@ -332,8 +332,11 @@
 
         /* POPUP INBOX UI */
         #msg-icon {
-            width: 30px;
-            height: 30px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
             background: var(--bg);
             border: 1px solid var(--accent-red);
             display: none;
@@ -342,8 +345,7 @@
             justify-content: center;
             cursor: pointer;
             z-index: 100;
-            font-size: 1.1rem;
-            margin-left: 15px;
+            font-size: 1rem;
             animation: pulse-border 1.5s infinite;
         }
 
@@ -460,46 +462,45 @@
                 <button class="lang-btn" id="btn-he" onclick="setLang('he', this)">עברית</button>
                 <button class="lang-btn" id="btn-ko" onclick="setLang('ko', this)">조선말</button>
             </div>
-            <div id="protocol-selector" style="display: flex; align-items: center;">
+            <div id="protocol-selector">
                 <button class="mode-btn" id="light-btn" onclick="setTheme('light')">Light_Protocol [OFF]</button>
                 <button class="mode-btn active" id="dark-btn" onclick="setTheme('dark')">Dark_Protocol [LIVE]</button>
-                <div id="msg-icon" onclick="openMsgModal()" title="INCOMING TRANSMISSION">✉</div>
             </div>
         </div>
 
-        <div id="container">
-            <div class="box">
-                <div class="label" id="lbl-monitor">---</div>
-                <div class="content" style="min-height: auto;">
-                    <div style="color: var(--accent-red); font-size: 10px;" id="lbl-tminus">---</div>
-                    <span id="t-minus">000:00:00:00</span>
-                    <div style="border-top: 1px solid var(--border); padding-top: 10px;">
-                        <span style="font-size: 10px; color: var(--label);" id="lbl-sat-text">---</span>
-                        <span id="saturacion">00.00%</span>
-                    </div>
+        <div class="box">
+            <div id="msg-icon" onclick="openMsgModal()" title="INCOMING TRANSMISSION">✉</div>
+            <div class="label" id="lbl-monitor">---</div>
+            <div class="content" style="min-height: auto;">
+                <div style="color: var(--accent-red); font-size: 10px;" id="lbl-tminus">---</div>
+                <span id="t-minus">000:00:00:00</span>
+                <div style="border-top: 1px solid var(--border); padding-top: 10px;">
+                    <span style="font-size: 10px; color: var(--label);" id="lbl-sat-text">---</span>
+                    <span id="saturacion">00.00%</span>
                 </div>
             </div>
-
-            <div class="box">
-                <div class="tabs">
-                    <div class="tab active-tab" onclick="setTab(0)" id="tab-0">README</div>
-                    <div class="tab" onclick="setTab(1)" id="tab-1">---</div>
-                    <div class="tab" onclick="setTab(2)" id="tab-2">---</div>
-                    <div class="tab" onclick="setTab(3)" id="tab-3">---</div>
-                </div>
-                <div class="content" id="console-body"></div>
-            </div>
-
-            <div class="box" style="border-left: 4px solid var(--accent-green);">
-                <div class="label" style="color: var(--accent-green);" id="lbl-task">---</div>
-                <div class="content" style="min-height: auto;">
-                    <div id="task-payload" class="payload"></div>
-                    <div id="task-meta" style="font-size: 11px; color: var(--label);"></div>
-                    <input type="text" id="input-ev" onkeypress="handleEvidence(event)">
-                </div>
-            </div>
-
         </div>
+
+        <div class="box">
+            <div class="tabs">
+                <div class="tab active-tab" onclick="setTab(0)" id="tab-0">README</div>
+                <div class="tab" onclick="setTab(1)" id="tab-1">---</div>
+                <div class="tab" onclick="setTab(2)" id="tab-2">---</div>
+                <div class="tab" onclick="setTab(3)" id="tab-3">---</div>
+            </div>
+            <div class="content" id="console-body"></div>
+        </div>
+
+        <div class="box" style="border-left: 4px solid var(--accent-green);">
+            <div class="label" style="color: var(--accent-green);" id="lbl-task">---</div>
+            <div class="content" style="min-height: auto;">
+                <div id="task-payload" class="payload"></div>
+                <div id="task-meta" style="font-size: 11px; color: var(--label);"></div>
+                <input type="text" id="input-ev" onkeypress="handleEvidence(event)">
+            </div>
+        </div>
+
+    </div>
     </div>
 
     <!-- POPUP INBOX MODAL -->
