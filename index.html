@@ -332,21 +332,18 @@
 
         /* POPUP INBOX UI */
         #msg-icon {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
+            width: 30px;
+            height: 30px;
             background: var(--bg);
-            border: 2px solid var(--accent-red);
+            border: 1px solid var(--accent-red);
             display: none;
             /* Hidden until message */
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 2000;
-            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
-            font-size: 1.5rem;
+            z-index: 100;
+            font-size: 1.1rem;
+            margin-left: 15px;
             animation: pulse-border 1.5s infinite;
         }
 
@@ -463,9 +460,10 @@
                 <button class="lang-btn" id="btn-he" onclick="setLang('he', this)">עברית</button>
                 <button class="lang-btn" id="btn-ko" onclick="setLang('ko', this)">조선말</button>
             </div>
-            <div id="protocol-selector">
+            <div id="protocol-selector" style="display: flex; align-items: center;">
                 <button class="mode-btn" id="light-btn" onclick="setTheme('light')">Light_Protocol [OFF]</button>
                 <button class="mode-btn active" id="dark-btn" onclick="setTheme('dark')">Dark_Protocol [LIVE]</button>
+                <div id="msg-icon" onclick="openMsgModal()" title="INCOMING TRANSMISSION">✉</div>
             </div>
         </div>
 
@@ -504,8 +502,7 @@
         </div>
     </div>
 
-    <!-- POPUP INBOX -->
-    <div id="msg-icon" onclick="openMsgModal()" title="INCOMING TRANSMISSION">✉</div>
+    <!-- POPUP INBOX MODAL -->
     <div id="msg-modal">
         <div class="modal-content">
             <div class="modal-header">[ INCOMING TRANSMISSION ]</div>
