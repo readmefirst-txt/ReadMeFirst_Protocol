@@ -245,7 +245,7 @@
         }
 
         .content {
-            padding: 20px;
+            padding: 15px;
             min-height: 420px;
             line-height: 1.6;
             font-size: 13px;
@@ -335,17 +335,17 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             background: var(--bg);
-            border: 2px solid var(--accent-red);
+            border: 3px solid var(--accent-red);
             display: none;
             /* Hidden until message */
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 100;
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             animation: blink-alert 1s infinite steps(2);
         }
 
@@ -724,7 +724,7 @@
                     lastMessage = data;
                     const icon = document.getElementById('msg-icon');
                     icon.style.display = 'flex';
-                    icon.style.animation = 'pulse-border 1.5s infinite';
+                    icon.style.animation = 'blink-alert 1s infinite steps(2)';
                 }
             });
 
