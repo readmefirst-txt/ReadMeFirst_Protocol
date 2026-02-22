@@ -15,7 +15,7 @@
             --text: #d4d4d4;
             --border: #222;
             --accent-red: #ff3333;
-            --accent-green: #00ff41;
+            --accent-green: var(--accent-red);
             --label: #555;
             --switch-bg: #111;
         }
@@ -27,7 +27,7 @@
             --text: #1a1a1a;
             --border: #ccc;
             --accent-red: #b00020;
-            --accent-green: #1b5e20;
+            --accent-green: var(--accent-red);
             --label: #888;
             --switch-bg: #ddd;
         }
@@ -68,7 +68,7 @@
             width: 95%;
             max-width: 400px;
             background: var(--box-bg);
-            border: 2px solid var(--accent-green);
+            border: 2px solid var(--accent-red);
             position: relative;
         }
 
@@ -76,7 +76,7 @@
             position: absolute;
             top: -40px;
             right: 0;
-            color: var(--accent-green);
+            color: var(--accent-red);
             cursor: pointer;
             font-size: 12px;
             text-transform: uppercase;
@@ -267,10 +267,10 @@
         }
 
         .payload {
-            color: var(--accent-green);
+            color: var(--accent-red);
             font-style: italic;
             margin-bottom: 15px;
-            border-left: 2px solid var(--accent-green);
+            border-left: 2px solid var(--accent-red);
             padding-left: 10px;
         }
 
@@ -278,7 +278,7 @@
             width: 100%;
             background: #000;
             border: 1px solid var(--border);
-            color: var(--accent-green);
+            color: var(--accent-red);
             padding: 12px;
             font-family: inherit;
             outline: none;
@@ -304,7 +304,7 @@
 
         a:hover {
             background: rgba(255, 255, 255, 0.05);
-            color: var(--accent-green);
+            color: var(--accent-red);
         }
 
         .stat-item {
